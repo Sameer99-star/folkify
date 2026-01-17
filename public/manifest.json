@@ -1,0 +1,17 @@
+{
+  "name": "Smart Folk Services",
+  "short_name": "Folk Services",
+  "description": "Discover India's Living Traditions - Connect with authentic folk artists",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF8F3",
+  "theme_color": "#7C2D12",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
