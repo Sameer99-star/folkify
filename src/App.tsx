@@ -4,6 +4,10 @@ import AdminDashboardHome from "./pages/AdminDashboardHome";
 import AdminArtists from "./pages/AdminArtists";
 import AdminUsers from "./pages/AdminUsers"; // ✅ ADD THIS
 import FolkDashboard from "./pages/FolkDashboard";
+import FolkBookings from "./pages/FolkBookings";
+import FolkProfile from "./pages/FolkProfile";
+
+
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -44,6 +48,10 @@ const App = () => (
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/folk-dashboard" element={<FolkDashboard />} />
+          <Route path="/folk/bookings" element={<FolkBookings />} />
+          <Route path="/folk/profile" element={<FolkProfile />} />
+
+
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
