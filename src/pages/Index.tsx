@@ -67,7 +67,7 @@ const Index = () => {
           >
             Connect with authentic folk artists, artisans, and performers for your special moments
           </motion.p>
-
+          
           {/* Search Bar */}
           <motion.div
             variants={itemVariants}
