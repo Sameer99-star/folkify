@@ -22,7 +22,7 @@ import NotFound from "./pages/NotFound";
 
 import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
-import ArtistSignupForm from "./pages/ArtistSignupForm"; // ✅ NEW
+import ArtistSignupForm from "./pages/ArtistSignupForm"; // ✅ keep this route
 
 const queryClient = new QueryClient();
 
@@ -38,10 +38,7 @@ const App = () => (
           <Route path="/" element={<Landing />} />
 
           {/* ================= AUTH ================= */}
-          {/* Login / Signup choice */}
           <Route path="/auth/:type" element={<Auth />} />
-
-          {/* Login / Signup form (user + artist login, user signup) */}
           <Route path="/auth/form" element={<AuthForm />} />
 
           {/* Artist signup (extended profile form) */}

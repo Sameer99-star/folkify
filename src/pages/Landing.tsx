@@ -9,7 +9,7 @@ const Landing = () => {
 
   return (
     <section className="relative h-screen overflow-hidden">
-      {/* Background */}
+      {/* Background Image */}
       <div className="absolute inset-0">
         <img
           src={heroImage}
@@ -30,15 +30,18 @@ const Landing = () => {
           <DiyaIcon size={56} className="text-saffron animate-diya" />
         </div>
 
-        {/* Title */}
-        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-10">
+        {/* App Name */}
+        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-10 max-w-2xl">
           Discover India’s
           <span className="block text-primary">Living Traditions</span>
         </h1>
 
         {/* Buttons */}
         <div className="flex gap-4">
-          <Button size="lg" onClick={() => navigate("/auth/login")}>
+          <Button
+            size="lg"
+            onClick={() => navigate("/auth/login")}
+          >
             Login
           </Button>
 
