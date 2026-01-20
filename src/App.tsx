@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 
 import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
+import ArtistSignupForm from "./pages/ArtistSignupForm"; // ✅ NEW
 
 const queryClient = new QueryClient();
 
@@ -33,24 +34,30 @@ const App = () => (
       <BrowserRouter>
         <Routes>
 
-          {/* LANDING */}
+          {/* ================= LANDING ================= */}
           <Route path="/" element={<Landing />} />
 
-          {/* AUTH */}
+          {/* ================= AUTH ================= */}
+          {/* Login / Signup choice */}
           <Route path="/auth/:type" element={<Auth />} />
+
+          {/* Login / Signup form (user + artist login, user signup) */}
           <Route path="/auth/form" element={<AuthForm />} />
 
-          {/* USER */}
+          {/* Artist signup (extended profile form) */}
+          <Route path="/signup/artist" element={<ArtistSignupForm />} />
+
+          {/* ================= USER ================= */}
           <Route path="/dashboard" element={<Index />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/artist/:id" element={<ArtistProfile />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/profile" element={<Profile />} />
 
-          {/* ARTIST */}
+          {/* ================= ARTIST ================= */}
           <Route path="/folk-dashboard" element={<FolkDashboard />} />
 
-          {/* ADMIN */}
+          {/* ================= ADMIN ================= */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<AdminDashboardHome />} />
             <Route path="artists" element={<AdminArtists />} />
@@ -58,7 +65,7 @@ const App = () => (
             <Route path="users" element={<AdminUsers />} />
           </Route>
 
-          {/* 404 */}
+          {/* ================= 404 ================= */}
           <Route path="*" element={<NotFound />} />
 
         </Routes>
