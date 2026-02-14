@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { supabase } from "./supabase";
-
 import AdminBookings from "./pages/AdminBookings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboardHome from "./pages/AdminDashboardHome";
@@ -29,21 +26,7 @@ const queryClient = new QueryClient();
 const App = () => {
 
   // 🔥 SUPABASE TEST (DO NOT DELETE YET)
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const getUsers = async () => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*");
-
-    if (error) {
-      console.error("❌ Supabase error:", error);
-    } else {
-      console.log("✅ Users from Supabase:", data);
-    }
-  };
+  
 
   return (
     <QueryClientProvider client={queryClient}>
