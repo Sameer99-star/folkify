@@ -4,6 +4,8 @@ import AdminDashboardHome from "./pages/AdminDashboardHome";
 import AdminArtists from "./pages/AdminArtists";
 import AdminUsers from "./pages/AdminUsers";
 import FolkDashboard from "./pages/FolkDashboard";
+import FolkBookings from "./pages/FolkBookings";
+import FolkProfile from "./pages/FolkProfile";
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -22,53 +24,55 @@ import NotFound from "./pages/NotFound";
 
 import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
-import ArtistSignupForm from "./pages/ArtistSignupForm"; // ✅ keep this route
+import ArtistSignupForm from "./pages/ArtistSignupForm";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
 
-          {/* ================= LANDING ================= */}
-          <Route path="/" element={<Landing />} />
+            {/* ================= LANDING ================= */}
+            <Route path="/" element={<Landing />} />
 
-          {/* ================= AUTH ================= */}
-          <Route path="/auth/:type" element={<Auth />} />
-          <Route path="/auth/form" element={<AuthForm />} />
+            {/* ================= AUTH ================= */}
+            <Route path="/auth/:type" element={<Auth />} />
+            <Route path="/auth/form" element={<AuthForm />} />
+            <Route path="/signup/artist" element={<ArtistSignupForm />} />
 
-          {/* Artist signup (extended profile form) */}
-          <Route path="/signup/artist" element={<ArtistSignupForm />} />
+            {/* ================= USER ================= */}
+            <Route path="/dashboard" element={<Index />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/artist/:id" element={<ArtistProfile />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/profile" element={<Profile />} />
 
-          {/* ================= USER ================= */}
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/artist/:id" element={<ArtistProfile />} />
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/profile" element={<Profile />} />
+            {/* ================= ARTIST ================= */}
+            <Route path="/folk-dashboard" element={<FolkDashboard />} />
+            <Route path="/folk/bookings" element={<FolkBookings />} />
+            <Route path="/folk/profile" element={<FolkProfile />} />
 
-          {/* ================= ARTIST ================= */}
-          <Route path="/folk-dashboard" element={<FolkDashboard />} />
+            {/* ================= ADMIN ================= */}
+            <Route path="/admin" element={<AdminDashboard />}>
+              <Route index element={<AdminDashboardHome />} />
+              <Route path="artists" element={<AdminArtists />} />
+              <Route path="bookings" element={<AdminBookings />} />
+              <Route path="users" element={<AdminUsers />} />
+            </Route>
 
-          {/* ================= ADMIN ================= */}
-          <Route path="/admin" element={<AdminDashboard />}>
-            <Route index element={<AdminDashboardHome />} />
-            <Route path="artists" element={<AdminArtists />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="users" element={<AdminUsers />} />
-          </Route>
+            {/* ================= 404 ================= */}
+            <Route path="*" element={<NotFound />} />
 
-          {/* ================= 404 ================= */}
-          <Route path="*" element={<NotFound />} />
-
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
