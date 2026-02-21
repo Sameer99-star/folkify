@@ -14,6 +14,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import ArtistProfile from "./pages/ArtistProfile";
@@ -21,13 +22,13 @@ import Bookings from "./pages/Bookings";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
+import Auth from "./pages/Auth";
+import AuthForm from "./pages/AuthForm";
+import ArtistSignupForm from "./pages/ArtistSignupForm";
+
 const queryClient = new QueryClient();
 
 const App = () => {
-
-  // 🔥 SUPABASE TEST (DO NOT DELETE YET)
-  
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -36,7 +37,27 @@ const App = () => {
         <BrowserRouter>
           <Routes>
 
-            {/* ADMIN ROUTES */}
+            {/* ================= LANDING ================= */}
+            <Route path="/" element={<Landing />} />
+
+            {/* ================= AUTH ================= */}
+            <Route path="/auth/:type" element={<Auth />} />
+            <Route path="/auth/form" element={<AuthForm />} />
+            <Route path="/signup/artist" element={<ArtistSignupForm />} />
+
+            {/* ================= USER ================= */}
+            <Route path="/dashboard" element={<Index />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/artist/:id" element={<ArtistProfile />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/profile" element={<Profile />} />
+
+            {/* ================= ARTIST ================= */}
+            <Route path="/folk-dashboard" element={<FolkDashboard />} />
+            <Route path="/folk/bookings" element={<FolkBookings />} />
+            <Route path="/folk/profile" element={<FolkProfile />} />
+
+            {/* ================= ADMIN ================= */}
             <Route path="/admin" element={<AdminDashboard />}>
               <Route index element={<AdminDashboardHome />} />
               <Route path="artists" element={<AdminArtists />} />
@@ -44,17 +65,7 @@ const App = () => {
               <Route path="users" element={<AdminUsers />} />
             </Route>
 
-            {/* USER ROUTES */}
-            <Route path="/" element={<Index />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/artist/:id" element={<ArtistProfile />} />
-            <Route path="/bookings" element={<Bookings />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/folk-dashboard" element={<FolkDashboard />} />
-            <Route path="/folk/bookings" element={<FolkBookings />} />
-            <Route path="/folk/profile" element={<FolkProfile />} />
-
-            {/* 404 */}
+            {/* ================= 404 ================= */}
             <Route path="*" element={<NotFound />} />
 
           </Routes>
