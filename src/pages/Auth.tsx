@@ -1,5 +1,6 @@
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import choiceBg from "../assets/auth-choice-bg.jpg"; // 👈 different background
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -12,35 +13,41 @@ const Auth = () => {
       ? paramType
       : searchParams.get("type") || "login";
 
-  // Navigate to AuthForm page for user (login or signup)
   const goUser = () => {
     navigate("/auth/form?type=" + type + "&role=user");
   };
 
-  // Navigate for artist
   const goArtist = () => {
     if (type === "signup") {
-      // Sign up as artist → extended profile form
       navigate("/signup/artist");
     } else {
-      // Login as artist → normal login form
       navigate("/auth/form?type=login&role=artist");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="bg-card p-8 rounded-xl shadow-lg w-full max-w-md space-y-6 text-center">
-        <h1 className="text-2xl font-bold">
-          {type === "login" ? "Login As" : "Sign In As"}
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center relative"
+      style={{ backgroundImage: "url(" + choiceBg + ")" }}
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/50"></div>
+
+      <div className="relative bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl w-full max-w-md space-y-6 text-center">
+        <h1 className="text-3xl font-bold">
+          {type === "login" ? "Login As" : "Sign Up As"}
         </h1>
 
-        <Button className="w-full" size="lg" onClick={goUser}>
+        <Button
+          className="w-full py-3 text-lg"
+          size="lg"
+          onClick={goUser}
+        >
           As User
         </Button>
 
         <Button
-          className="w-full"
+          className="w-full py-3 text-lg"
           size="lg"
           variant="outline"
           onClick={goArtist}
