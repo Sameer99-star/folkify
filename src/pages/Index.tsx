@@ -101,7 +101,6 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Divider */}
       <div className="px-8 py-4">
         <FolkDivider className="w-full h-4 text-primary" />
       </div>
@@ -147,7 +146,7 @@ const Index = () => {
         </div>
 
         <div className="flex gap-4 overflow-x-auto px-4 pb-4">
-          {featuredArtists.slice(0, 4).map((artist) => (
+          {featuredArtists.map((artist) => (
             <div key={artist.id} className="flex-shrink-0 w-64">
               <ArtistCard
                 {...artist}

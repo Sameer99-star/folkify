@@ -1,3 +1,36 @@
+// ✅ IMAGE IMPORTS (from src/assets)
+import gulabo from "@/assets/gulabo.jpg";
+import kailash from "@/assets/kailash.jpg";
+import falguni from "@/assets/falguni.jpg";
+import mamekhan from "@/assets/mamekhan.jpg";
+import nooransisters from "@/assets/nooransisters.jpg";
+import papon from "@/assets/papon.jpg";
+import swati from "@/assets/swati.jpg";
+import nalini from "@/assets/nalini.jpg";
+import maljiarts from "@/assets/maljiarts.jpg";
+import ashok from "@/assets/ashok.jpg";
+
+/* =========================
+   INTERFACES
+========================= */
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  duration: string;
+}
+
+export interface Review {
+  id: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+  sentiment: "happy" | "neutral" | "sad";
+}
+
 export interface Artist {
   id: string;
   name: string;
@@ -17,178 +50,215 @@ export interface Artist {
   reviews: Review[];
 }
 
-export interface Service {
-  id: string;
-  name: string;
-  description: string;
-  price: string;
-  duration: string;
-}
+/* =========================
+   CATEGORIES (Required by Explore.tsx)
+========================= */
 
-export interface Review {
-  id: string;
-  userName: string;
-  rating: number;
-  comment: string;
-  date: string;
-  sentiment: 'happy' | 'neutral' | 'sad';
-}
-
-export interface Category {
-  id: string;
-  name: string;
-  icon: string;
-  count: number;
-}
-
-export const categories: Category[] = [
-  { id: 'music', name: 'Folk Music', icon: '🎵', count: 234 },
-  { id: 'dance', name: 'Traditional Dance', icon: '💃', count: 189 },
-  { id: 'painting', name: 'Folk Art', icon: '🎨', count: 312 },
-  { id: 'craft', name: 'Handicrafts', icon: '🏺', count: 256 },
-  { id: 'textile', name: 'Textiles', icon: '🧵', count: 178 },
-  { id: 'pottery', name: 'Pottery', icon: '🫖', count: 145 },
-  { id: 'storytelling', name: 'Storytelling', icon: '📖', count: 89 },
-  { id: 'puppetry', name: 'Puppetry', icon: '🎭', count: 67 },
+export const categories = [
+  { id: "dance", name: "Folk Dance", icon: "💃" },
+  { id: "music", name: "Folk Music", icon: "🎵" },
+  { id: "painting", name: "Painting", icon: "🎨" },
+  { id: "sculpture", name: "Sculpture", icon: "🗿" },
+  { id: "craft", name: "Craft", icon: "🧵" },
+  { id: "wood", name: "Wood Art", icon: "🪵" },
 ];
+
+/* =========================
+   ARTISTS
+========================= */
 
 export const featuredArtists: Artist[] = [
   {
-    id: '1',
-    name: 'Lakshmi Devi',
-    skill: 'Madhubani Painter',
-    location: 'Madhubani, Bihar',
-    image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&h=600&fit=crop',
-    coverImage: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&h=400&fit=crop',
+    id: "1",
+    name: "Gulabo Sapera",
+    skill: "Kalbeliya Dancer",
+    location: "Rajasthan",
+    image: gulabo,
+    coverImage: gulabo,
     rating: 4.9,
-    reviewCount: 127,
+    reviewCount: 210,
     verified: true,
-    tags: ['Madhubani', 'Wall Art', 'Workshops'],
-    story: 'Born into a family of traditional Madhubani artists in the heart of Bihar, I learned this sacred art form at my grandmother\'s feet. Each stroke tells a story passed down through five generations. My paintings celebrate the divine feminine, nature\'s abundance, and the timeless tales from our epics.',
-    experience: '25+ years of preserving and teaching Madhubani art',
-    priceRange: '₹5,000 - ₹50,000',
-    services: [
-      { id: 's1', name: 'Custom Wall Painting', description: 'Transform your space with authentic Madhubani murals', price: '₹15,000 onwards', duration: '3-5 days' },
-      { id: 's2', name: 'Workshop (Group)', description: 'Learn traditional techniques in an immersive session', price: '₹2,500/person', duration: '4 hours' },
-      { id: 's3', name: 'Commission Artwork', description: 'Personalized paintings for your special occasions', price: '₹5,000 onwards', duration: '1-2 weeks' },
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=400',
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-      'https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1?w=400',
-    ],
-    reviews: [
-      { id: 'r1', userName: 'Priya M.', rating: 5, comment: 'Lakshmi ji\'s work transformed our home. The attention to detail is extraordinary!', date: '2 weeks ago', sentiment: 'happy' },
-      { id: 'r2', userName: 'Rahul S.', rating: 5, comment: 'Best workshop experience. Learned so much about our heritage.', date: '1 month ago', sentiment: 'happy' },
-    ],
-  },
-  {
-    id: '2',
-    name: 'Ramesh Bhagat',
-    skill: 'Baul Singer',
-    location: 'Santiniketan, West Bengal',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=600&fit=crop',
-    rating: 4.8,
-    reviewCount: 89,
-    verified: true,
-    tags: ['Baul', 'Live Performance', 'Spiritual'],
-    story: 'The Baul tradition flows through my veins. For thirty years, I have wandered singing the songs of divine love. My ektara and dotara carry the wisdom of the mystic poets - Lalon Fakir, Rabindranath. Each performance is a spiritual journey.',
-    experience: '30 years as a wandering Baul performer',
-    priceRange: '₹15,000 - ₹1,00,000',
-    services: [
-      { id: 's1', name: 'Wedding Performance', description: 'Sacred music for your special day', price: '₹35,000 onwards', duration: '2-3 hours' },
-      { id: 's2', name: 'Festival Performance', description: 'Authentic Baul experience for cultural events', price: '₹25,000 onwards', duration: '1-2 hours' },
-    ],
-    gallery: [],
-    reviews: [
-      { id: 'r1', userName: 'Ananya D.', rating: 5, comment: 'His voice touched our souls. Unforgettable wedding ceremony!', date: '3 weeks ago', sentiment: 'happy' },
-    ],
-  },
-  {
-    id: '3',
-    name: 'Sunita Kumari',
-    skill: 'Kathak Dancer',
-    location: 'Lucknow, Uttar Pradesh',
-    image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=600&fit=crop',
-    rating: 4.9,
-    reviewCount: 156,
-    verified: true,
-    tags: ['Kathak', 'Classical', 'Training'],
-    story: 'Trained in the Lucknow gharana, I have dedicated my life to preserving the grace and storytelling of Kathak. From the courts of Nawabs to international stages, each footwork pattern carries centuries of tradition.',
-    experience: '20 years of performance and teaching',
-    priceRange: '₹20,000 - ₹2,00,000',
-    services: [
-      { id: 's1', name: 'Stage Performance', description: 'Full classical Kathak recital', price: '₹50,000 onwards', duration: '1.5-2 hours' },
-      { id: 's2', name: 'Private Classes', description: 'One-on-one Kathak training', price: '₹3,000/session', duration: '1.5 hours' },
-    ],
+    tags: ["dance"],
+    story: "Renowned Kalbeliya dancer preserving Rajasthan’s folk tradition.",
+    experience: "30+ years",
+    priceRange: "₹50,000 - ₹2,00,000",
+    services: [],
     gallery: [],
     reviews: [],
   },
   {
-    id: '4',
-    name: 'Mohammad Yusuf',
-    skill: 'Blue Pottery Artisan',
-    location: 'Jaipur, Rajasthan',
-    image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=600&fit=crop',
+    id: "2",
+    name: "Kailash Kumar",
+    skill: "Chhau Performer",
+    location: "Jharkhand",
+    image: kailash,
+    coverImage: kailash,
+    rating: 4.8,
+    reviewCount: 145,
+    verified: true,
+    tags: ["dance"],
+    story: "Traditional Chhau dancer performing across India.",
+    experience: "18 years",
+    priceRange: "₹30,000 - ₹1,50,000",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "3",
+    name: "Falguni Pathak",
+    skill: "Garba Singer",
+    location: "Mumbai",
+    image: falguni,
+    coverImage: falguni,
+    rating: 4.6,
+    reviewCount: 320,
+    verified: true,
+    tags: ["music"],
+    story: "Popular Garba and Dandiya Raas performer.",
+    experience: "25+ years",
+    priceRange: "₹2,00,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "4",
+    name: "Mame Khan",
+    skill: "Manganiyar Folk Singer",
+    location: "Rajasthan",
+    image: mamekhan,
+    coverImage: mamekhan,
     rating: 4.7,
+    reviewCount: 190,
+    verified: true,
+    tags: ["music"],
+    story: "Famous Manganiyar folk singer from Rajasthan.",
+    experience: "20+ years",
+    priceRange: "₹1,00,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "5",
+    name: "Nooran Sisters",
+    skill: "Sufi Folk Singers",
+    location: "Punjab",
+    image: nooransisters,
+    coverImage: nooransisters,
+    rating: 4.7,
+    reviewCount: 280,
+    verified: true,
+    tags: ["music"],
+    story: "Powerful Sufi folk music duo.",
+    experience: "15+ years",
+    priceRange: "₹1,50,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "6",
+    name: "Papon",
+    skill: "Folk-Fusion Singer",
+    location: "Assam",
+    image: papon,
+    coverImage: papon,
+    rating: 4.5,
+    reviewCount: 310,
+    verified: true,
+    tags: ["music"],
+    story: "Blends Assamese folk with contemporary music.",
+    experience: "20+ years",
+    priceRange: "₹2,00,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "7",
+    name: "Swati Pasari",
+    skill: "Contemporary Painter",
+    location: "Kolkata",
+    image: swati,
+    coverImage: swati,
+    rating: 4.7,
+    reviewCount: 120,
+    verified: true,
+    tags: ["painting"],
+    story: "Modern artist promoting sustainability through art.",
+    experience: "12 years",
+    priceRange: "₹50,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "8",
+    name: "Nalini Malani",
+    skill: "Visual Artist",
+    location: "Mumbai",
+    image: nalini,
+    coverImage: nalini,
+    rating: 4.5,
     reviewCount: 98,
     verified: true,
-    tags: ['Blue Pottery', 'Ceramics', 'Decor'],
-    story: 'My family has been crafting blue pottery for seven generations. This Persian-influenced art form found its home in Jaipur centuries ago. Each piece I create carries the distinctive cobalt blue that has made our craft world-renowned.',
-    experience: '35 years mastering traditional techniques',
-    priceRange: '₹500 - ₹25,000',
-    services: [
-      { id: 's1', name: 'Custom Orders', description: 'Bespoke pottery for homes and events', price: 'Price varies', duration: '2-4 weeks' },
-      { id: 's2', name: 'Pottery Workshop', description: 'Hands-on experience creating your own piece', price: '₹1,500/person', duration: '3 hours' },
-    ],
+    tags: ["painting"],
+    story: "Internationally recognized contemporary visual artist.",
+    experience: "40+ years",
+    priceRange: "₹3,00,000+",
+    services: [],
     gallery: [],
     reviews: [],
   },
   {
-    id: '5',
-    name: 'Geeta Rabari',
-    skill: 'Kutchi Embroiderer',
-    location: 'Bhuj, Gujarat',
-    image: 'https://images.unsplash.com/photo-1590086782957-93c06ef21604?w=400&h=600&fit=crop',
-    rating: 4.8,
-    reviewCount: 73,
-    verified: false,
-    tags: ['Embroidery', 'Textile', 'Traditional'],
-    story: 'The mirror work and intricate stitches of Kutchi embroidery are my inheritance. In the vast Rann, our women have created this vibrant art for generations. Each piece takes months of patient, meditative work.',
-    experience: '28 years of traditional Kutchi craft',
-    priceRange: '₹2,000 - ₹50,000',
-    services: [
-      { id: 's1', name: 'Custom Garments', description: 'Traditional embroidered clothing', price: '₹8,000 onwards', duration: '4-6 weeks' },
-    ],
-    gallery: [],
-    reviews: [],
-  },
-  {
-    id: '6',
-    name: 'Raju Naik',
-    skill: 'Warli Artist',
-    location: 'Dahanu, Maharashtra',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop',
-    rating: 4.6,
-    reviewCount: 64,
+    id: "9",
+    name: "Malji Arts",
+    skill: "Sandalwood Carving",
+    location: "Jaipur",
+    image: maljiarts,
+    coverImage: maljiarts,
+    rating: 4.7,
+    reviewCount: 160,
     verified: true,
-    tags: ['Warli', 'Tribal Art', 'Murals'],
-    story: 'Born into the Warli tribe, this art is not just my profession but my identity. The simple geometric forms - circles, triangles, squares - tell stories of our daily life, our festivals, our connection with nature.',
-    experience: '22 years preserving tribal heritage',
-    priceRange: '₹3,000 - ₹30,000',
-    services: [
-      { id: 's1', name: 'Wall Murals', description: 'Transform spaces with authentic Warli art', price: '₹10,000 onwards', duration: '2-4 days' },
-    ],
+    tags: ["wood", "craft"],
+    story: "Masters of intricate sandalwood carvings.",
+    experience: "35+ years",
+    priceRange: "₹10,000 - ₹5,00,000",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "10",
+    name: "Ashok Gudigar",
+    skill: "Temple Sculptor",
+    location: "Karnataka",
+    image: ashok,
+    coverImage: ashok,
+    rating: 4.2,
+    reviewCount: 75,
+    verified: true,
+    tags: ["sculpture"],
+    story: "Expert in traditional temple sculptures.",
+    experience: "22 years",
+    priceRange: "₹50,000+",
+    services: [],
     gallery: [],
     reviews: [],
   },
 ];
 
-export const nearbyArtists = featuredArtists.slice(0, 4);
+export const nearbyArtists = featuredArtists;
+
+/* =========================
+   EVENT TYPES
+========================= */
 
 export const eventTypes = [
-  { id: 'wedding', name: 'Wedding', icon: '💒', description: 'Traditional performances for your celebration' },
-  { id: 'festival', name: 'Festival', icon: '🪔', description: 'Cultural events and community celebrations' },
-  { id: 'workshop', name: 'Workshop', icon: '🎨', description: 'Learn traditional arts and crafts' },
-  { id: 'private', name: 'Private Event', icon: '🏛️', description: 'Intimate gatherings and special occasions' },
+  { id: "wedding", name: "Wedding", icon: "💒", description: "Traditional performances" },
+  { id: "festival", name: "Festival", icon: "🪔", description: "Cultural celebrations" },
+  { id: "workshop", name: "Workshop", icon: "🎨", description: "Learn from artists" },
+  { id: "private", name: "Private Event", icon: "🏛️", description: "Exclusive performances" },
 ];
