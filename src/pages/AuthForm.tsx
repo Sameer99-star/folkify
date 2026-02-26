@@ -1,4 +1,6 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { supabase } from "../supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import loginBg from "../assets/login-bg.jpg";
@@ -10,11 +12,64 @@ const AuthForm = () => {
   const type = searchParams.get("type") || "login";
   const role = searchParams.get("role") || "user";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
 
     if (role === "artist") navigate("/folk-dashboard");
     else navigate("/dashboard");
+
+    if (type === "signup") {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullName,
+        role: role,
+      },
+    },
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // Insert into public.users table
+  if (data.user) {
+    await supabase.from("users").insert([
+      {
+        id: data.user.id,
+        name: fullName,
+        email: email,
+        role: role,
+      },
+    ]);
+  }
+
+  alert("Signup successful! Please check your email.");
+  navigate("/auth/login");
+}
+    else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      if (role === "artist") navigate("/folk-dashboard");
+      else navigate("/admin/users"); // change later if needed
+    }
+ 
   };
 
   return (
@@ -35,19 +90,29 @@ const AuthForm = () => {
         </h1>
 
         {type === "signup" && (
-          <>
-            <Input placeholder="Full Name" required />
-            {role === "artist" && (
-              <>
-                <Input placeholder="Skill / Art Form" required />
-                <Input placeholder="Portfolio / Website Link" />
-              </>
-            )}
-          </>
+          <Input
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+          />
         )}
 
-        <Input type="email" placeholder="Email" required />
-        <Input type="password" placeholder="Password" required />
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <Button type="submit" className="w-full">
           {type === "login" ? "Login" : "Create Account"}
