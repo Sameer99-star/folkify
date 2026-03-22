@@ -26,6 +26,11 @@ import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
 import ArtistSignupForm from "./pages/ArtistSignupForm";
 
+/* ✅ NEW PAGES (IMPORTANT) */
+import ProfileEdit from "./pages/ProfileEdit";
+import Language from "./pages/Language";
+import Settings from "./pages/Settings";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -51,6 +56,11 @@ const App = () => {
             <Route path="/artist/:id" element={<ArtistProfile />} />
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/profile" element={<Profile />} />
+
+            {/* ✅ PROFILE SUB PAGES */}
+            <Route path="/profile/edit" element={<ProfileEdit />} />
+            <Route path="/profile/language" element={<Language />} />
+            <Route path="/profile/settings" element={<Settings />} />
 
             {/* ================= ARTIST ================= */}
             <Route path="/folk-dashboard" element={<FolkDashboard />} />

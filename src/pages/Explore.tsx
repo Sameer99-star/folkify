@@ -30,40 +30,41 @@ const Explore = () => {
 
   return (
     <AppLayout>
-      {/* Header */}
+      {/* HEADER */}
       <div className="sticky top-0 z-40 bg-background border-b">
-        <div className="px-4 py-4">
+        <div className="px-3 py-3">
           <div className="flex items-center gap-2">
-            <div className="flex-1 flex items-center gap-3 bg-muted rounded-full px-4 py-2.5">
-              <Search className="w-5 h-5 text-muted-foreground" />
+            <div className="flex-1 flex items-center gap-2 bg-muted rounded-full px-3 py-2">
+              <Search className="w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search artists..."
-                className="flex-1 bg-transparent focus:outline-none"
+                className="flex-1 bg-transparent text-sm focus:outline-none"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery("")}>
                   <X className="w-4 h-4 text-muted-foreground" />
                 </button>
               )}
-              <Mic className="w-5 h-5 text-primary" />
+              <Mic className="w-4 h-4 text-primary" />
             </div>
 
             <Button variant="outline" size="icon" className="rounded-full">
-              <SlidersHorizontal className="w-5 h-5" />
+              <SlidersHorizontal className="w-4 h-4" />
             </Button>
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="flex gap-2 overflow-x-auto px-4 pb-4">
+        {/* CATEGORIES */}
+        <div className="flex gap-2 overflow-x-auto px-3 pb-3">
           <CategoryChip
             title="All"
             isActive={!selectedCategory}
             onClick={() => setSelectedCategory(null)}
           />
+
           {categories.map((category) => (
             <CategoryChip
               key={category.id}
@@ -80,20 +81,20 @@ const Explore = () => {
         </div>
       </div>
 
-      {/* Results */}
-      <div className="px-4 py-6">
-        <p className="text-sm text-muted-foreground mb-4">
+      {/* RESULTS */}
+      <div className="px-3 py-5">
+        <p className="text-xs text-muted-foreground mb-3">
           {filteredArtists.length} artists found
         </p>
 
-        {/* 3 per row on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 🔥 4 PER ROW + COMPACT */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {filteredArtists.map((artist, index) => (
             <motion.div
               key={artist.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
+              transition={{ delay: index * 0.03 }}
             >
               <ArtistCard
                 {...artist}
@@ -103,11 +104,12 @@ const Explore = () => {
           ))}
         </div>
 
+        {/* EMPTY STATE */}
         {filteredArtists.length === 0 && (
-          <div className="text-center py-16">
-            <Search className="w-10 h-10 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-xl mb-2">No Artists Found</h3>
-            <p className="text-muted-foreground">
+          <div className="text-center py-12">
+            <Search className="w-8 h-8 mx-auto mb-3 text-muted-foreground" />
+            <h3 className="text-lg mb-1">No Artists Found</h3>
+            <p className="text-sm text-muted-foreground">
               Try adjusting your search.
             </p>
           </div>
