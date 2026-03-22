@@ -1,5 +1,15 @@
 import { motion } from 'framer-motion';
-import { ChevronRight, Globe, Heart, HelpCircle, LogOut, Settings, User } from 'lucide-react';
+import {
+  ChevronRight,
+  Globe,
+  Heart,
+  HelpCircle,
+  LogOut,
+  Settings,
+  User,
+  Edit,
+  Instagram
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Button } from '@/components/ui/button';
@@ -18,103 +28,121 @@ const Profile = () => {
 
   return (
     <AppLayout>
-      <div className="px-4 py-6 safe-top">
-        {/* Header */}
-        <div className="text-center mb-8">
+      <div className="px-4 py-6">
+
+        {/* ================= HEADER ================= */}
+        <div className="text-center mb-6">
+
           {/* Avatar */}
-          <div className="ornamental-frame w-28 h-28 mx-auto mb-4">
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <span className="text-4xl">👤</span>
+          <div className="relative w-24 h-24 mx-auto mb-3">
+            <div className="w-full h-full rounded-2xl bg-muted flex items-center justify-center text-3xl shadow-md">
+              👤
             </div>
+
+            {/* Edit Icon */}
+            <button
+              onClick={() => navigate('/profile/edit')}
+              className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full shadow-md"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
           </div>
-          
-          <h1 className="font-display text-2xl text-foreground mb-1">Guest User</h1>
-          <p className="text-muted-foreground mb-4">Exploring India's heritage</p>
-          
-          <div className="flex gap-3 justify-center">
-            <Button onClick={() => navigate('/login')}>
+
+          {/* Name */}
+          <h1 className="font-display text-xl font-semibold text-foreground">
+            Guest User
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-sm text-muted-foreground mb-2">
+            Exploring India's heritage
+          </p>
+
+          {/* Instagram Handle */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+            <Instagram className="w-4 h-4" />
+            <span>@your_handle</span>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-2 justify-center">
+            <Button size="sm" onClick={() => navigate('/login')}>
               Sign In
             </Button>
-            <Button variant="outline" onClick={() => navigate('/register')}>
+            <Button size="sm" variant="outline" onClick={() => navigate('/register')}>
               Create Account
             </Button>
           </div>
         </div>
 
-        <FolkDivider className="w-full h-4 text-primary/30 mb-6" />
+        <FolkDivider className="w-full h-4 text-primary/30 mb-5" />
 
-        {/* Join as Artist CTA */}
+        {/* ================= CTA ================= */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-terracotta rounded-2xl p-5 mb-6 relative overflow-hidden"
+          className="bg-gradient-terracotta rounded-xl p-4 mb-5"
         >
-          <div className="relative z-10">
-            <h3 className="font-display text-lg text-primary-foreground mb-2">
-              Are You a Folk Artist?
-            </h3>
-            <p className="text-primary-foreground/80 text-sm mb-3">
-              Share your craft with the world and connect with admirers of traditional art.
-            </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="bg-background text-primary hover:bg-background/90"
-            >
-              Join as Professional
-            </Button>
-          </div>
-          
-          {/* Decorative pattern */}
-          <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10">
-            <svg viewBox="0 0 50 100" className="h-full" preserveAspectRatio="xMaxYMid slice">
-              <circle cx="25" cy="20" r="15" fill="white" />
-              <circle cx="25" cy="50" r="10" fill="white" />
-              <circle cx="25" cy="80" r="15" fill="white" />
-            </svg>
-          </div>
+          <h3 className="font-display text-base text-primary-foreground mb-1">
+            Are You a Folk Artist?
+          </h3>
+          <p className="text-primary-foreground/80 text-xs mb-3">
+            Showcase your talent and reach more people.
+          </p>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="bg-white text-primary"
+            onClick={() => navigate('/register')}
+          >
+            Join as Professional
+          </Button>
         </motion.div>
 
-        {/* Menu Items */}
-        <div className="space-y-1">
+        {/* ================= MENU ================= */}
+        <div className="space-y-2">
           {menuItems.map((item, index) => (
             <motion.button
               key={item.label}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => navigate(item.path)}
-              className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 transition-colors text-left"
+              className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/40 transition text-left"
             >
-              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                <item.icon className="w-5 h-5 text-muted-foreground" />
+              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center">
+                <item.icon className="w-4 h-4 text-muted-foreground" />
               </div>
+
               <div className="flex-1">
-                <p className="font-medium text-foreground">{item.label}</p>
+                <p className="text-sm font-medium">{item.label}</p>
                 {item.value && (
-                  <p className="text-sm text-muted-foreground">{item.value}</p>
+                  <p className="text-xs text-muted-foreground">{item.value}</p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
             </motion.button>
           ))}
         </div>
 
-        {/* Logout */}
-        <div className="mt-6 pt-6 border-t border-border">
-          <button className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-destructive/5 transition-colors text-left">
-            <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-              <LogOut className="w-5 h-5 text-destructive" />
+        {/* ================= LOGOUT ================= */}
+        <div className="mt-5 pt-5 border-t">
+          <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 transition text-left">
+            <div className="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center">
+              <LogOut className="w-4 h-4 text-red-500" />
             </div>
-            <p className="font-medium text-destructive">Log Out</p>
+            <p className="text-sm font-medium text-red-500">Log Out</p>
           </button>
         </div>
 
-        {/* App Info */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-muted-foreground">Smart Folk Services v1.0</p>
-          <p className="text-xs text-muted-foreground mt-1">Made with ❤️ for Indian Heritage</p>
+        {/* ================= FOOTER ================= */}
+        <div className="mt-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            Smart Folk Services v1.0
+          </p>
         </div>
+
       </div>
     </AppLayout>
   );
