@@ -17,6 +17,9 @@ import weavingImg from "@/assets/weaving.jpg";
 import woodenCraftImg from "@/assets/woodencraft.jpg";
 import handmadeTextileImg from "@/assets/handmade-textile.jpg";
 
+// ✅ NEW IMPORT
+import miniatureImg from "@/assets/miniature.jpg";
+
 const Index = () => {
   const navigate = useNavigate();
   const [searchFocused, setSearchFocused] = useState(false);
@@ -59,10 +62,11 @@ const Index = () => {
       <section className="px-3 py-5">
         <h2 className="text-lg mb-4 font-semibold">Explore by Craft</h2>
 
-        {/* 🔥 5 CARDS IN ROW */}
+        {/* 🔥 GRID */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
           {[
             { name: "Painting", image: paintingImg },
+            { name: "Miniature Art", image: miniatureImg }, // ✅ ADDED HERE
             { name: "Folk Music", image: folkMusicImg },
             { name: "Folk Dance", image: folkDanceImg },
             { name: "Pottery", image: potteryImg },
@@ -75,7 +79,6 @@ const Index = () => {
               onClick={() => navigate("/explore")}
               className="rounded-md overflow-hidden cursor-pointer"
             >
-              {/* 🔥 FULL IMAGE NO EMPTY SPACE */}
               <div className="aspect-square">
                 <img
                   src={item.image}
@@ -95,7 +98,6 @@ const Index = () => {
           Featured Artists
         </h2>
 
-        {/* 🔥 5 IN ROW */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 px-3">
           {featuredArtists.map((artist) => (
             <ArtistCard

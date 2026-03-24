@@ -10,6 +10,10 @@ import nalini from "@/assets/nalini.jpg";
 import maljiarts from "@/assets/maljiarts.jpg";
 import ashok from "@/assets/ashok.jpg";
 
+// ✅ NEW IMAGES
+import syedShakir from "@/assets/syed-shakir.jpg";
+import vijaySharma from "@/assets/vijay-sharma.jpg";
+
 /* =========================
    INTERFACES
 ========================= */
@@ -51,13 +55,14 @@ export interface Artist {
 }
 
 /* =========================
-   CATEGORIES (Required by Explore.tsx)
+   CATEGORIES
 ========================= */
 
 export const categories = [
   { id: "dance", name: "Folk Dance", icon: "💃" },
   { id: "music", name: "Folk Music", icon: "🎵" },
   { id: "painting", name: "Painting", icon: "🎨" },
+  { id: "miniature", name: "Miniature Art", icon: "🖌️" }, // ✅ ADDED
   { id: "sculpture", name: "Sculpture", icon: "🗿" },
   { id: "craft", name: "Craft", icon: "🧵" },
   { id: "wood", name: "Wood Art", icon: "🪵" },
@@ -244,6 +249,45 @@ export const featuredArtists: Artist[] = [
     story: "Expert in traditional temple sculptures.",
     experience: "22 years",
     priceRange: "₹50,000+",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+
+  // ✅ NEW ARTISTS ADDED (NO DATA LOST)
+
+  {
+    id: "11",
+    name: "Syed Shakir Ali",
+    skill: "Mughal Miniature Painting",
+    location: "Jaipur, Rajasthan",
+    image: syedShakir,
+    coverImage: syedShakir,
+    rating: 4.7,
+    reviewCount: 80,
+    verified: true,
+    tags: ["miniature", "painting"],
+    story: "Specializes in traditional Mughal miniature art.",
+    experience: "20+ years",
+    priceRange: "₹15,000 - ₹1,00,000",
+    services: [],
+    gallery: [],
+    reviews: [],
+  },
+  {
+    id: "12",
+    name: "Vijay Sharma",
+    skill: "Miniature Painting Artist",
+    location: "Himachal Pradesh",
+    image: vijaySharma,
+    coverImage: vijaySharma,
+    rating: 4.6,
+    reviewCount: 65,
+    verified: true,
+    tags: ["miniature", "painting"],
+    story: "Expert in Himachali miniature painting style.",
+    experience: "18 years",
+    priceRange: "₹10,000 - ₹80,000",
     services: [],
     gallery: [],
     reviews: [],
