@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ArtistCard, ArtistCardCompact } from "@/components/ui/artist-card";
-import { Button } from "@/components/ui/button";
 import { FolkDivider, DiyaIcon } from "@/components/icons/FolkIcons";
 import { featuredArtists, nearbyArtists } from "@/data/mockData";
 
@@ -16,8 +15,6 @@ import potteryImg from "@/assets/pottery.jpg";
 import weavingImg from "@/assets/weaving.jpg";
 import woodenCraftImg from "@/assets/woodencraft.jpg";
 import handmadeTextileImg from "@/assets/handmade-textile.jpg";
-
-// ✅ NEW IMPORT
 import miniatureImg from "@/assets/miniature.jpg";
 
 const Index = () => {
@@ -62,11 +59,10 @@ const Index = () => {
       <section className="px-3 py-5">
         <h2 className="text-lg mb-4 font-semibold">Explore by Craft</h2>
 
-        {/* 🔥 GRID */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
           {[
             { name: "Painting", image: paintingImg },
-            { name: "Miniature Art", image: miniatureImg }, // ✅ ADDED HERE
+            { name: "Miniature Art", image: miniatureImg },
             { name: "Folk Music", image: folkMusicImg },
             { name: "Folk Dance", image: folkDanceImg },
             { name: "Pottery", image: potteryImg },
@@ -123,18 +119,6 @@ const Index = () => {
               onClick={() => navigate("/artist/" + artist.id)}
             />
           ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-3 py-6">
-        <div className="bg-gradient-terracotta rounded-xl p-5 text-center">
-          <h2 className="text-white font-semibold mb-2">
-            Are You a Folk Artist?
-          </h2>
-          <Button onClick={() => navigate("/register")}>
-            Join Now
-          </Button>
         </div>
       </section>
 
