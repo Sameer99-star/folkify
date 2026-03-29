@@ -3,6 +3,7 @@ import { useState } from "react";
 import { supabase } from "../supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FcGoogle } from "react-icons/fc";
 import loginBg from "../assets/login-bg.jpg";
 
 const AuthForm = () => {
@@ -19,43 +20,38 @@ const AuthForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
-    if (role === "artist") navigate("/folk-dashboard");
-    else navigate("/dashboard");
-
     if (type === "signup") {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: fullName,
-        role: role,
-      },
-    },
-  });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            role: role,
+          },
+        },
+      });
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+      if (error) {
+        alert(error.message);
+        return;
+      }
 
-  // Insert into public.users table
-  if (data.user) {
-    await supabase.from("users").insert([
-      {
-        id: data.user.id,
-        name: fullName,
-        email: email,
-        role: role,
-      },
-    ]);
-  }
+      // Insert into public.users table
+      if (data.user) {
+        await supabase.from("users").insert([
+          {
+            id: data.user.id,
+            name: fullName,
+            email: email,
+            role: role,
+          },
+        ]);
+      }
 
-  alert("Signup successful! Please check your email.");
-  navigate("/auth/login");
-}
-    else {
+      alert("Signup successful! Please check your email.");
+      navigate("/auth/login");
+    } else {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -66,18 +62,24 @@ const AuthForm = () => {
         return;
       }
 
-      if (role === "artist") navigate("/folk-dashboard");
-      else navigate("/admin/users"); // change later if needed
+      // Redirect after login
+      if (role === "artist") {
+        navigate("/folk-dashboard");
+      } else {
+        navigate("/admin/users"); // change if needed
+      }
     }
- 
+  };
+
+  const handleGoogleLogin = () => {
+    alert("Google Login Coming Soon 🚀");
   };
 
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center relative"
-      style={{ backgroundImage: "url(" + loginBg + ")" }}
+      style={{ backgroundImage: `url(${loginBg})` }}
     >
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
       <form
@@ -90,12 +92,21 @@ const AuthForm = () => {
         </h1>
 
         {type === "signup" && (
-          <Input
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
+          <>
+            <Input
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+            />
+
+            {role === "artist" && (
+              <>
+                <Input placeholder="Skill / Art Form" required />
+                <Input placeholder="Portfolio / Website Link" />
+              </>
+            )}
+          </>
         )}
 
         <Input
@@ -116,6 +127,22 @@ const AuthForm = () => {
 
         <Button type="submit" className="w-full">
           {type === "login" ? "Login" : "Create Account"}
+        </Button>
+
+        <div className="flex items-center gap-2 my-3">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <span className="text-sm text-gray-500">OR</span>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full flex items-center justify-center gap-2"
+          onClick={handleGoogleLogin}
+        >
+          <FcGoogle className="text-xl" />
+          Continue with Google
         </Button>
       </form>
     </div>

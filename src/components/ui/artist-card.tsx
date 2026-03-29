@@ -10,13 +10,8 @@ interface ArtistCardProps {
   rating: number;
   reviewCount: number;
   verified?: boolean;
-  tags?: string[];
   onClick?: () => void;
 }
-
-/* ============================= */
-/* Main Artist Card              */
-/* ============================= */
 
 export const ArtistCard = ({
   name,
@@ -30,52 +25,51 @@ export const ArtistCard = ({
 }: ArtistCardProps) => {
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className="cursor-pointer group"
+      className="cursor-pointer"
     >
-      <div className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-card">
-        
-        {/* Portrait Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden">
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-          />
+      <div className="relative h-40 rounded-lg overflow-hidden shadow-sm">
 
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        {/* 🔥 BLUR BACKGROUND (fills empty space) */}
+        <img
+          src={image}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover blur-md scale-110"
+        />
 
-          {verified && (
-            <div className="absolute top-3 right-3">
-              <VerifiedIcon size={18} className="text-saffron drop-shadow-md" />
-            </div>
-          )}
+        {/* 🔥 ORIGINAL IMAGE (FULLY VISIBLE) */}
+        <img
+          src={image}
+          alt={name}
+          className="relative w-full h-full object-contain"
+        />
 
-          {/* Text Overlay */}
-          <div className="absolute bottom-4 left-4 right-4 text-white">
-            <div className="flex items-center gap-1 mb-1">
-              <StarIcon size={14} filled className="text-saffron" />
-              <span className="text-sm font-semibold">{rating}</span>
-              <span className="text-xs opacity-80">
-                ({reviewCount})
-              </span>
-            </div>
+        {/* OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-            <h3 className="text-base font-semibold truncate">
-              {name}
-            </h3>
+        {/* VERIFIED */}
+        {verified && (
+          <div className="absolute top-2 right-2">
+            <VerifiedIcon size={14} className="text-saffron" />
+          </div>
+        )}
 
-            <p className="text-sm opacity-90 truncate">
-              {skill}
-            </p>
+        {/* TEXT */}
+        <div className="absolute bottom-2 left-2 right-2 text-white">
+          <div className="flex items-center gap-1 text-xs">
+            <StarIcon size={12} filled className="text-saffron" />
+            <span>{rating}</span>
+            <span className="opacity-80">({reviewCount})</span>
+          </div>
 
-            <div className="flex items-center gap-1 text-xs opacity-80 mt-1">
-              <LocationIcon size={12} />
-              <span className="truncate">{location}</span>
-            </div>
+          <h3 className="text-sm font-semibold truncate">{name}</h3>
+          <p className="text-xs opacity-80 truncate">{skill}</p>
+
+          <div className="flex items-center gap-1 text-xs opacity-70">
+            <LocationIcon size={10} />
+            <span className="truncate">{location}</span>
           </div>
         </div>
       </div>
@@ -84,7 +78,7 @@ export const ArtistCard = ({
 };
 
 /* ============================= */
-/* Compact Horizontal Card       */
+/* COMPACT CARD                  */
 /* ============================= */
 
 export const ArtistCardCompact = ({
@@ -95,46 +89,37 @@ export const ArtistCardCompact = ({
   rating,
   verified = false,
   onClick,
-}: Omit<ArtistCardProps, "reviewCount" | "tags">) => {
+}: Omit<ArtistCardProps, "reviewCount">) => {
   return (
     <motion.div
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className="flex gap-3 p-3 bg-card rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer"
+      className="flex gap-2 p-2 bg-card rounded-lg shadow-sm cursor-pointer"
     >
-      <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+      <div className="relative w-14 h-14 rounded-md overflow-hidden">
+
+        {/* Blur BG */}
+        <img
+          src={image}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover blur-sm scale-110"
+        />
+
+        {/* Main Image */}
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-cover object-center"
+          className="relative w-full h-full object-contain"
         />
-
-        {verified && (
-          <div className="absolute top-1 right-1">
-            <VerifiedIcon size={14} className="text-saffron" />
-          </div>
-        )}
       </div>
 
-      <div className="flex-1 min-w-0">
-        <h4 className="text-sm font-semibold truncate">
-          {name}
-        </h4>
+      <div className="flex-1">
+        <h4 className="text-xs font-semibold truncate">{name}</h4>
+        <p className="text-xs text-muted-foreground truncate">{skill}</p>
 
-        <p className="text-xs text-muted-foreground truncate">
-          {skill}
-        </p>
-
-        <div className="flex items-center gap-3 text-xs mt-1">
-          <div className="flex items-center gap-1">
-            <StarIcon size={12} filled className="text-saffron" />
-            <span>{rating}</span>
-          </div>
-
-          <div className="flex items-center gap-1 text-muted-foreground">
-            <LocationIcon size={12} />
-            <span className="truncate">{location}</span>
-          </div>
+        <div className="flex items-center gap-2 text-xs">
+          <span>{rating} ⭐</span>
+          <span className="truncate">{location}</span>
         </div>
       </div>
     </motion.div>
