@@ -6,7 +6,7 @@ const linkBase =
 
 const AdminSidebar = () => {
   return (
-    <aside className="w-64 bg-white h-screen shadow-sm fixed left-0 top-0 p-6">
+    <aside className="w-64 bg-white h-screen shadow-sm fixed left-0 top-0 p-6 z-10">
       <h2 className="text-xl font-bold text-[#5A2E1B] mb-8">
         Smart Folk Admin
       </h2>
