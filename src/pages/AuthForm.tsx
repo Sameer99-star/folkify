@@ -32,6 +32,9 @@ const AuthForm = () => {
         },
       });
 
+      console.log("SIGNUP DATA:", data);
+      console.log("SIGNUP ERROR:", error);
+
       if (error) {
         alert(error.message);
         return;
@@ -49,26 +52,45 @@ const AuthForm = () => {
         ]);
       }
 
-      alert("Signup successful! Please check your email.");
+      alert("Signup successful!");
       navigate("/auth/login");
     } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-      if (error) {
-        alert(error.message);
-        return;
-      }
+  console.log("LOGIN DATA:", data);
+  console.log("LOGIN ERROR:", error);
 
-      // Redirect after login
-      if (role === "artist") {
-        navigate("/folk-dashboard");
-      } else {
-        navigate("/admin/users"); // change if needed
-      }
-    }
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // ✅ Get user from database
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", data.user.id)
+    .single();
+
+  console.log("DB USER:", userData);
+
+  if (userError) {
+    alert("User data not found");
+    return;
+  }
+
+  // ✅ Redirect based on DB role
+  if (userData.role === "artist") {
+  navigate("/folk-dashboard");
+} else if (userData.role === "admin") {
+  navigate("/admin/users");
+} else {
+  navigate("/dashboard");
+}
+}
   };
 
   const handleGoogleLogin = () => {
