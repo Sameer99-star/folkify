@@ -1,9 +1,31 @@
-// smart hacakhtn project
-import { supabase } from "../supabase";
 import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../supabase";
 import AdminSidebar from "../components/AdminSidebar";
 
 const AdminDashboard = () => {
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+  const getUser = async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+
+    if (sessionData.session) {
+      const userId = sessionData.session.user.id;
+
+      const { data } = await supabase
+        .from("users")
+        .select("name")
+        .eq("id", userId)
+        .single();
+
+      if (data) {
+        setUserName(data.name);
+      }
+    }
+  };
+
+  getUser();
+}, []);
   return (
     <div className="flex min-h-screen bg-[#FAF6F1]">
       {/* Sidebar */}
@@ -19,8 +41,8 @@ const AdminDashboard = () => {
 
           <div>
             <h2 className="text-2xl font-semibold text-[#5A2E1B]">
-              Platform Admin
-            </h2>
+  Welcome {userName } 👋
+</h2>
             <p className="text-sm text-gray-500">
               Smart Folk Services
             </p>
