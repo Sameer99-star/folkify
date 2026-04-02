@@ -1,4 +1,5 @@
 // smart hacakhtn project
+import { supabase } from "../supabase";
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar";
 
@@ -25,9 +26,16 @@ const AdminDashboard = () => {
             </p>
           </div>
 
-          <button className="ml-auto px-4 py-2 rounded-full bg-[#C04A1A] text-white text-sm">
-            Logout
-          </button>
+          <button
+  onClick={async () => {
+    console.log("LOGOUT CLICKED");
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  }}
+  className="ml-auto px-4 py-2 rounded-full bg-[#C04A1A] text-white text-sm"
+>
+  Logout
+</button>
         </div>
 
         {/* Child pages will appear here */}
