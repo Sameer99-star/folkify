@@ -1,12 +1,29 @@
+import React from "react";
+
 interface ChatButtonProps {
   onClick: () => void;
 }
 
-const ChatButton = ({ onClick }: ChatButtonProps) => {
+const ChatButton: React.FC<ChatButtonProps> = ({ onClick }) => {
+  console.log("ChatButton is rendering");
+
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-24 right-4 bg-primary text-white px-4 py-3 rounded-full shadow-lg hover:scale-105 transition"
+      style={{
+        position: "fixed",
+        bottom: "20px",
+        right: "20px",
+        backgroundColor: "red", // 👈 DEBUG COLOR
+        color: "white",
+        border: "none",
+        borderRadius: "50%",
+        width: "60px",
+        height: "60px",
+        fontSize: "24px",
+        cursor: "pointer",
+        zIndex: 9999 // 👈 VERY IMPORTANT FIX
+      }}
     >
       💬
     </button>

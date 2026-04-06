@@ -1,59 +1,68 @@
-import { useState } from "react";
-import { sendMessageToAI } from "@/lib/ai";
-import { aiContext } from "@/data/aiContext";
+import React, { useState } from "react";
+import { sendMessageToAI } from "../../lib/ai";
+import ChatMessage from "./ChatMessage";
 
-const Chatbot = () => {
+const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
 
   const sendMessage = async () => {
-    if (!input) return;
+    if (!input.trim()) return;
 
     const userMessage = { role: "user", content: input };
 
-    // add user message
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    setInput("");
 
-    // ✅ call correct function
-    const reply = await sendMessageToAI(aiContext + "\nUser: " + input);
+    const reply = await sendMessageToAI(updatedMessages);
 
-    // add AI response
     setMessages((prev) => [
       ...prev,
       { role: "assistant", content: reply },
     ]);
-
-    setInput("");
   };
 
   return (
-    <div className="fixed bottom-20 right-4 w-80 bg-white shadow-xl rounded-xl p-4">
+    <div style={{
+      position: "fixed",
+      bottom: "80px",
+      right: "20px",
+      width: "300px",
+      background: "white",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+      borderRadius: "10px",
+      padding: "10px",
+      display: "flex",
+      flexDirection: "column"
+    }}>
       
-      {/* CHAT MESSAGES */}
-      <div className="h-60 overflow-y-auto space-y-2">
+      <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
+        🎨 Folk AI Assistant
+      </div>
+
+      <div style={{ height: "200px", overflowY: "auto", marginBottom: "10px" }}>
+        {messages.length === 0 && (
+          <p style={{ color: "gray", fontSize: "12px" }}>
+            Ask about artists or art forms...
+          </p>
+        )}
+
         {messages.map((msg, i) => (
-          <div key={i} className="text-sm">
-            <b>{msg.role === "user" ? "You" : "AI"}:</b> {msg.content}
-          </div>
+          <ChatMessage key={i} role={msg.role} content={msg.content} />
         ))}
       </div>
 
-      {/* INPUT */}
-      <div className="flex mt-2 gap-2">
+      <div style={{ display: "flex", gap: "5px" }}>
         <input
-          className="flex-1 border px-2 py-1 rounded"
+          style={{ flex: 1, padding: "6px" }}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about artists..."
+          placeholder="Ask..."
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button
-          className="bg-primary text-white px-3 rounded"
-          onClick={sendMessage}
-        >
-          Send
-        </button>
+        <button onClick={sendMessage}>Send</button>
       </div>
-
     </div>
   );
 };
