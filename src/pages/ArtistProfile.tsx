@@ -3,11 +3,11 @@ import { supabase } from "../supabase";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Share2, Heart, MapPin, Calendar, Clock } from 'lucide-react';
-import { AppLayout } from '@/components/layout/AppLayout';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { StarIcon, VerifiedIcon, HeartIcon, FolkDivider, WedddingIcon, FestivalIcon, WorkshopIcon, PrivateEventIcon } from '@/components/icons/FolkIcons';
-import { featuredArtists, eventTypes } from '@/data/mockData';
+import {AppLayout} from "../components/layout/AppLayout";
+import { Button } from "../components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { StarIcon, VerifiedIcon, HeartIcon, FolkDivider, WedddingIcon, FestivalIcon, WorkshopIcon, PrivateEventIcon } from '../components/icons/FolkIcons'
+import { featuredArtists, eventTypes } from "../data/mockData";
 
 const eventIcons: Record<string, typeof WedddingIcon> = {
   wedding: WedddingIcon,
