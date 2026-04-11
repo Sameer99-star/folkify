@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import { supabase } from "../supabase";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Share2, Heart, MapPin, Calendar, Clock } from 'lucide-react';
@@ -25,7 +26,30 @@ const ArtistProfile = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
-  const artist = featuredArtists.find((a) => a.id === id);
+  const [artist, setArtist] = useState<any>(null);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+
+  const fetchArtist = async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (!error) {
+      setArtist(data);
+    }
+
+    setLoading(false);
+  };
+
+  fetchArtist();
+}, [id]);
+if (loading) {
+  return <div className="p-8">Loading...</div>;
+}
 
   if (!artist) {
     return (
@@ -93,7 +117,7 @@ const ArtistProfile = () => {
           <div className="flex items-start gap-4 mb-6">
             {/* Profile Image */}
             <div className="ornamental-frame w-24 h-24 flex-shrink-0">
-              <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
+              <img src="https://via.placeholder.com/150" alt={artist.name} className="w-full h-full object-cover" />
             </div>
             
             <div className="flex-1 min-w-0">
@@ -103,11 +127,11 @@ const ArtistProfile = () => {
                   <VerifiedIcon size={20} className="text-saffron flex-shrink-0" />
                 )}
               </div>
-              <p className="text-primary font-medium mb-2">{artist.skill}</p>
+              <p className="text-primary font-medium mb-2">Artist</p>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span>{artist.location}</span>
+                  <span>India</span>
                 </div>
               </div>
             </div>
@@ -118,18 +142,22 @@ const ArtistProfile = () => {
             <div className="flex-1 text-center">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <StarIcon size={18} filled className="text-saffron" />
-                <span className="font-display text-xl">{artist.rating}</span>
+                <span className="font-display text-xl">5.0</span>
               </div>
-              <p className="text-xs text-muted-foreground">{artist.reviewCount} reviews</p>
+              <p className="text-xs text-muted-foreground">100 reviews</p>
             </div>
             <div className="w-px h-10 bg-border" />
             <div className="flex-1 text-center">
-              <p className="font-display text-xl mb-1">{artist.experience.split(' ')[0]}</p>
+              <div>
+  {["Artist"].map((item, index) => (
+    <span key={index}>{item}</span>
+  ))}
+</div>
               <p className="text-xs text-muted-foreground">Experience</p>
             </div>
             <div className="w-px h-10 bg-border" />
             <div className="flex-1 text-center">
-              <p className="font-display text-xl mb-1">{artist.priceRange.split(' ')[0]}</p>
+              <p className="font-display text-xl mb-1">{artist?.priceRange || "₹500"}</p>
               <p className="text-xs text-muted-foreground">Starting</p>
             </div>
           </div>
@@ -153,85 +181,49 @@ const ArtistProfile = () => {
 
             <TabsContent value="story" className="mt-6">
               <h3 className="font-display text-lg text-foreground mb-3">Artist Story</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">{artist.story}</p>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+  This artist is part of Smart Folk platform.
+</p>
               
               <FolkDivider className="w-full h-4 text-primary/30 mb-6" />
               
               {/* Tags */}
               <div className="flex flex-wrap gap-2">
-                {artist.tags.map((tag) => (
-                  <span key={tag} className="fabric-chip">{tag}</span>
-                ))}
+                <div className="flex flex-wrap gap-2">
+  {["Artist"].map((item, index) => (
+    <span key={index} className="fabric-chip">
+      {item}
+    </span>
+  ))}
+</div>
               </div>
             </TabsContent>
+              <TabsContent value="services" className="mt-6">
+  <div className="space-y-4">
+    <motion.div className="p-4 bg-muted/30 rounded-2xl border border-border">
+      <h4 className="font-display text-lg text-foreground mb-1">
+        Folk Performance
+      </h4>
 
-            <TabsContent value="services" className="mt-6">
-              <div className="space-y-4">
-                {artist.services.map((service) => (
-                  <motion.div
-                    key={service.id}
-                    className="p-4 bg-muted/30 rounded-2xl border border-border"
-                    whileHover={{ scale: 1.01 }}
-                  >
-                    <h4 className="font-display text-lg text-foreground mb-1">{service.name}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">{service.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-primary font-semibold">{service.price}</span>
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {service.duration}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </TabsContent>
+      <p className="text-sm text-muted-foreground mb-3">
+        Traditional performance by artist
+      </p>
+
+      <div className="flex items-center justify-between">
+        <span className="text-primary font-semibold">₹500</span>
+        <span className="text-muted-foreground text-sm">2 hrs</span>
+      </div>
+    </motion.div>
+  </div>
+</TabsContent>
 
             <TabsContent value="gallery" className="mt-6">
-              {artist.gallery.length > 0 ? (
-                <div className="grid grid-cols-2 gap-3">
-                  {artist.gallery.map((image, index) => (
-                    <motion.div
-                      key={index}
-                      className="aspect-square rounded-2xl overflow-hidden"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <img src={image} alt="" className="w-full h-full object-cover" />
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <p>Gallery coming soon</p>
-                </div>
-              )}
-            </TabsContent>
+  <p>No images available</p>
+</TabsContent>
 
-            <TabsContent value="reviews" className="mt-6">
-              {artist.reviews.length > 0 ? (
-                <div className="space-y-4">
-                  {artist.reviews.map((review) => (
-                    <div key={review.id} className="p-4 bg-muted/30 rounded-2xl">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">{review.userName}</span>
-                        <div className="flex items-center gap-1">
-                          <StarIcon size={14} filled className="text-saffron" />
-                          <span className="text-sm">{review.rating}</span>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{review.comment}</p>
-                      <span className="text-xs text-muted-foreground">{review.date}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <p>No reviews yet</p>
-                </div>
-              )}
-            </TabsContent>
+      <TabsContent value="reviews" className="mt-6">
+  <p>No reviews yet</p>
+</TabsContent>
           </Tabs>
         </div>
 

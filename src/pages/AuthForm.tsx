@@ -70,10 +70,10 @@ const AuthForm = () => {
 
   // ✅ Get user from database
   const { data: userData, error: userError } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", data.user.id)
-    .single();
+  .from("users")
+  .select("role")
+  .eq("id", data.user.id)
+  .single();
 
   console.log("DB USER:", userData);
 
