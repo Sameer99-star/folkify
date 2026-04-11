@@ -1,3 +1,4 @@
+import ArtistBookings from "./pages/ArtistBookings";
 import AdminBookings from "./pages/AdminBookings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboardHome from "./pages/AdminDashboardHome";
@@ -7,9 +8,9 @@ import FolkDashboard from "./pages/FolkDashboard";
 import FolkBookings from "./pages/FolkBookings";
 import FolkProfile from "./pages/FolkProfile";
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "./components/ui/toaster";
+import { Toaster as Sonner } from "./components/ui/sonner";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -28,13 +29,14 @@ import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
 import ArtistSignupForm from "./pages/ArtistSignupForm";
 
-/* ✅ NEW PAGES (IMPORTANT) */
+/* NEW PAGES */
 import ProfileEdit from "./pages/ProfileEdit";
 import Language from "./pages/Language";
 import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
+/* 🔐 PROTECTED ROUTE */
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
@@ -59,12 +61,14 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
   return allowed ? children : null;
 };
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
+
         <BrowserRouter>
           <Routes>
 
@@ -83,7 +87,7 @@ const App = () => {
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/profile" element={<Profile />} />
 
-            {/* ✅ PROFILE SUB PAGES */}
+            {/* PROFILE SUB PAGES */}
             <Route path="/profile/edit" element={<ProfileEdit />} />
             <Route path="/profile/language" element={<Language />} />
             <Route path="/profile/settings" element={<Settings />} />
@@ -95,17 +99,20 @@ const App = () => {
 
             {/* ================= ADMIN ================= */}
             <Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <AdminDashboard />
-    </ProtectedRoute>
-  }
->
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<AdminDashboardHome />} />
               <Route path="artists" element={<AdminArtists />} />
               <Route path="bookings" element={<AdminBookings />} />
               <Route path="users" element={<AdminUsers />} />
+
+              {/* ✅ FIXED ROUTE */}
+              <Route path="artist-bookings" element={<ArtistBookings />} />
             </Route>
 
             {/* ================= 404 ================= */}
