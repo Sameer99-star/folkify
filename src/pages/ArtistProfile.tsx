@@ -61,10 +61,32 @@ if (loading) {
     );
   }
 
-  const handleBookNow = () => {
-    setShowBooking(true);
-    setBookingStep(1);
-  };
+  const handleBookNow = async () => {
+  const { data: sessionData } = await supabase.auth.getSession();
+
+  if (!sessionData.session) {
+    alert("Please login first");
+    return;
+  }
+
+  const userId = sessionData.session.user.id;
+
+  const { error } = await supabase.from("bookings").insert([
+    {
+      user_id: userId,
+      artist_id: artist.id,
+      event_type: "General",
+      event_date: new Date().toISOString(),
+    },
+  ]);
+
+  if (error) {
+    alert("Booking failed ❌");
+    console.log(error);
+  } else {
+    alert("Booking successful ✅");
+  }
+};
 
   const handleConfirmBooking = () => {
     setBookingConfirmed(true);
