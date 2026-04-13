@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { sendMessageToAI } from "../../lib/ai";
 import ChatMessage from "./ChatMessage";
+import chatBg from "@/assets/chat-bg.png";
 
-const Chatbot: React.FC = () => {
+const Chatbot = ({ onClose }: { onClose: () => void }) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
 
@@ -24,27 +25,33 @@ const Chatbot: React.FC = () => {
   };
 
   return (
-    <div style={{
-      position: "fixed",
-      bottom: "80px",
-      right: "20px",
-      width: "300px",
-      background: "white",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-      borderRadius: "10px",
-      padding: "10px",
-      display: "flex",
-      flexDirection: "column"
-    }}>
-      
-      <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
-        🎨 Folk AI Assistant
+    <div className="fixed bottom-24 right-4 w-80 rounded-2xl overflow-hidden shadow-2xl">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center bg-gradient-to-r from-orange-500 to-pink-500 text-white px-4 py-3 font-semibold text-lg">
+        <span>💃 Folkify AI</span>
+
+        {/* ✅ CLOSE BUTTON */}
+        <button
+          onClick={onClose}
+          className="text-white text-lg"
+        >
+          ⬇
+        </button>
       </div>
 
-      <div style={{ height: "200px", overflowY: "auto", marginBottom: "10px" }}>
+      {/* CHAT AREA */}
+      <div
+        className="h-64 overflow-y-auto p-3 space-y-2"
+        style={{
+          backgroundImage: `url(${chatBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         {messages.length === 0 && (
-          <p style={{ color: "gray", fontSize: "12px" }}>
-            Ask about artists or art forms...
+          <p className="text-xs text-gray-700 bg-white/70 p-2 rounded">
+            Ask about artists, folk dance, music...
           </p>
         )}
 
@@ -53,15 +60,22 @@ const Chatbot: React.FC = () => {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: "5px" }}>
+      {/* INPUT */}
+      <div className="flex items-center gap-2 p-2 bg-white">
         <input
-          style={{ flex: 1, padding: "6px" }}
+          className="flex-1 border rounded-full px-3 py-1 text-sm outline-none"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask..."
+          placeholder="Ask something..."
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button onClick={sendMessage}>Send</button>
+
+        <button
+          onClick={sendMessage}
+          className="bg-orange-500 text-white px-4 py-1 rounded-full text-sm"
+        >
+          Send
+        </button>
       </div>
     </div>
   );
