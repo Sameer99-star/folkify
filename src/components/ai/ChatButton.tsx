@@ -1,32 +1,29 @@
-import React from "react";
+import { useState } from "react";
+import myIcon from "@/assets/my-dancer.png";
+import Chatbot from "./Chatbot";
 
-interface ChatButtonProps {
-  onClick: () => void;
-}
-
-const ChatButton: React.FC<ChatButtonProps> = ({ onClick }) => {
-  console.log("ChatButton is rendering");
+const ChatButton = () => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <button
-      onClick={onClick}
-      style={{
-        position: "fixed",
-        bottom: "20px",
-        right: "20px",
-        backgroundColor: "red", // 👈 DEBUG COLOR
-        color: "white",
-        border: "none",
-        borderRadius: "50%",
-        width: "60px",
-        height: "60px",
-        fontSize: "24px",
-        cursor: "pointer",
-        zIndex: 9999 // 👈 VERY IMPORTANT FIX
-      }}
-    >
-      💬
-    </button>
+    <>
+      {/* 💃 BUTTON (only when closed) */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed bottom-24 right-4 w-14 h-14 rounded-full shadow-lg overflow-hidden"
+        >
+          <img
+            src={myIcon}
+            alt="chat"
+            className="w-full h-full object-cover"
+          />
+        </button>
+      )}
+
+      {/* 🤖 CHATBOT */}
+      {open && <Chatbot onClose={() => setOpen(false)} />}
+    </>
   );
 };
 

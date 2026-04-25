@@ -9,17 +9,13 @@ const ChatMessage: React.FC<Props> = ({ role, content }) => {
   const isUser = role === "user";
 
   return (
-    <div style={{ display: "flex", justifyContent: isUser ? "flex-end" : "flex-start" }}>
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-2}`}>
       <div
-        style={{
-          padding: "8px 12px",
-          borderRadius: "10px",
-          maxWidth: "75%",
-          backgroundColor: isUser ? "#ff7043" : "#e0e0e0",
-          color: isUser ? "white" : "black",
-          fontSize: "14px",
-          marginBottom: "6px"
-        }}
+        className={`px-3 py-2 rounded-2xl text-sm max-w-[75%] ${
+          isUser
+            ? "bg-orange-500 text-white rounded-br-sm"
+            : "bg-white border text-gray-800 rounded-bl-sm"
+        }`}
       >
         {content}
       </div>
