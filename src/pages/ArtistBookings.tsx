@@ -88,15 +88,41 @@ const ArtistBookings = () => {
     setFiltered(data);
   };
 
-  const handleAccept = async (id: string) => {
-    await supabase.from("bookings").update({ status: "accepted" }).eq("id", id);
-    fetchBookings();
-  };
+  const handleAccept = async (booking: any) => {
+  await supabase
+    .from("bookings")
+    .update({ status: "accepted" })
+    .eq("id", booking.id);
 
-  const handleReject = async (id: string) => {
-    await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
-    fetchBookings();
-  };
+  // 🔔 ADD NOTIFICATION
+  await supabase.from("notifications").insert([
+    {
+      user_id: booking.user_id,
+      message: "Your booking has been accepted 🎉",
+      type: "accepted",
+    },
+  ]);
+
+  fetchBookings();
+};
+
+  const handleReject = async (booking: any) => {
+  await supabase
+    .from("bookings")
+    .update({ status: "cancelled" })
+    .eq("id", booking.id);
+
+  // 🔔 NOTIFICATION
+  await supabase.from("notifications").insert([
+    {
+      user_id: booking.user_id,
+      message: "Your booking was rejected ❌",
+      type: "cancelled",
+    },
+  ]);
+
+  fetchBookings();
+};
 
   return (
     <div className="p-6 space-y-6">
@@ -210,14 +236,14 @@ const ArtistBookings = () => {
               {booking.status === "pending" && (
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleAccept(booking.id)}
+                    onClick={() => handleAccept(booking)}
                     className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm"
                   >
                     Accept
                   </button>
 
                   <button
-                    onClick={() => handleReject(booking.id)}
+                    onClick={() => handleReject(booking)}
                     className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
                   >
                     Reject

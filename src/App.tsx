@@ -1,3 +1,4 @@
+import Notifications from "./pages/Notifications";
 import ArtistBookings from "./pages/ArtistBookings";
 import AdminBookings from "./pages/AdminBookings";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -29,7 +30,6 @@ import Auth from "./pages/Auth";
 import AuthForm from "./pages/AuthForm";
 import ArtistSignupForm from "./pages/ArtistSignupForm";
 
-/* NEW PAGES */
 import ProfileEdit from "./pages/ProfileEdit";
 import Language from "./pages/Language";
 import Settings from "./pages/Settings";
@@ -87,6 +87,9 @@ const App = () => {
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/profile" element={<Profile />} />
 
+            {/* ✅ USER NOTIFICATIONS */}
+            <Route path="/notifications" element={<Notifications />} />
+
             {/* PROFILE SUB PAGES */}
             <Route path="/profile/edit" element={<ProfileEdit />} />
             <Route path="/profile/language" element={<Language />} />
@@ -96,6 +99,9 @@ const App = () => {
             <Route path="/folk-dashboard" element={<FolkDashboard />} />
             <Route path="/folk/bookings" element={<FolkBookings />} />
             <Route path="/folk/profile" element={<FolkProfile />} />
+
+            {/* ✅ ARTIST HANDLES BOOKINGS */}
+            <Route path="/artist-bookings" element={<ArtistBookings />} />
 
             {/* ================= ADMIN ================= */}
             <Route
@@ -110,9 +116,6 @@ const App = () => {
               <Route path="artists" element={<AdminArtists />} />
               <Route path="bookings" element={<AdminBookings />} />
               <Route path="users" element={<AdminUsers />} />
-
-              {/* ✅ FIXED ROUTE */}
-              <Route path="artist-bookings" element={<ArtistBookings />} />
             </Route>
 
             {/* ================= 404 ================= */}
