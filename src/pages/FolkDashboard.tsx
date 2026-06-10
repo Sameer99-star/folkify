@@ -1,21 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FolkLayout from "../components/layout/FolkLayout";
+import { supabase } from "../supabase";
+
+interface ArtistData {
+  name: string;
+  skill: string;
+  location: string;
+}
 
 const FolkDashboard: React.FC = () => {
+  const [artist, setArtist] = useState<ArtistData | null>(null);
+
+  useEffect(() => {
+    const loadArtist = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) return;
+
+      const { data, error } = await supabase
+        .from("users")
+        .select("name, skill, location")
+        .eq("id", session.user.id)
+        .single();
+
+      if (!error && data) {
+        setArtist(data);
+      }
+    };
+
+    loadArtist();
+  }, []);
+
   return (
     <FolkLayout>
       <div className="space-y-8">
-        {/* DASHBOARD HEADER */}
-       <section className="bg-white rounded-2xl p-6 shadow-sm">
-       <h1 className="text-2xl font-semibold text-[#5A2E1B]">
-       Artist Dashboard
-      </h1>
-      <p className="text-gray-600 mt-1">
-      Manage your bookings, portfolio and reviews
-      </p>
-      </section>
+        <section className="bg-white rounded-2xl p-6 shadow-sm">
+          <h1 className="text-2xl font-semibold text-[#5A2E1B]">
+            Artist Dashboard
+          </h1>
 
-        {/* PROFILE PANEL */}
+          <p className="text-gray-600 mt-1">
+            Manage your bookings, portfolio and reviews
+          </p>
+        </section>
+
         <section className="bg-white rounded-2xl p-6 flex items-center gap-6 shadow-sm">
           <div className="w-20 h-20 rounded-full bg-orange-200 flex items-center justify-center text-3xl">
             🎨
@@ -23,11 +53,15 @@ const FolkDashboard: React.FC = () => {
 
           <div>
             <h2 className="text-2xl font-semibold text-[#5A2E1B]">
-              Lakshmi Devi
+              {artist?.name || "Loading..."}
             </h2>
-            <p className="text-[#8B5E3C]">Madhubani Painter</p>
+
+            <p className="text-[#8B5E3C]">
+              {artist?.skill || "Artist"}
+            </p>
+
             <p className="text-sm text-gray-500">
-              ⭐ 4.9 · Madhubani, Bihar
+              {artist?.location || "Location not added"}
             </p>
           </div>
 
@@ -36,167 +70,28 @@ const FolkDashboard: React.FC = () => {
           </button>
         </section>
 
-        {/* STATS PANEL */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-          <StatCard title="Total Bookings" value="12" />
-          <StatCard title="Pending Requests" value="3" />
-          <StatCard title="Rating" value="4.9" />
-          <StatCard title="Profile Views" value="120" />
+          <StatCard title="Total Bookings" value="0" />
+          <StatCard title="Pending Requests" value="0" />
+          <StatCard title="Rating" value="0.0" />
+          <StatCard title="Profile Views" value="0" />
         </section>
-
-        {/* BOOKINGS PANEL */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm">
-        <h3 className="text-xl font-semibold text-[#5A2E1B] mb-4">
-  Booking Requests
-</h3>
-
-<div className="divide-y rounded-xl border">
-  <BookingRow
-    event="Wedding Performance"
-    client="Rahul Sharma"
-    date="25 Jan 2026"
-    location="Jaipur"
-  />
-
-  <BookingRow
-    event="Cultural Festival"
-    client="Anita Verma"
-    date="2 Feb 2026"
-    location="Delhi"
-  />
-</div>
-
-        </section>
-
-        {/* PORTFOLIO PANEL */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-[#5A2E1B] mb-4">
-            Portfolio
-          </h3>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((item) => (
-              <div
-                key={item}
-                className="h-40 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 font-medium"
-              >
-                Artwork {item}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* REVIEWS PANEL */}
-        <section className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-[#5A2E1B] mb-4">
-            Recent Reviews
-          </h3>
-
-          <div className="space-y-4">
-            <ReviewCard
-              name="Rahul Sharma"
-              rating="5.0"
-              review="Amazing performance! Very professional and punctual."
-            />
-            <ReviewCard
-              name="Anita Verma"
-              rating="4.5"
-              review="Beautiful work. Guests really loved it."
-            />
-          </div>
-        </section>
-
       </div>
     </FolkLayout>
   );
 };
 
-/* SMALL COMPONENTS */
-
-const StatCard = ({ title, value }: { title: string; value: string }) => (
+const StatCard = ({
+  title,
+  value,
+}: {
+  title: string;
+  value: string;
+}) => (
   <div className="bg-white rounded-2xl p-5 shadow-sm">
-
     <p className="text-sm text-gray-500">{title}</p>
     <p className="text-2xl font-semibold text-[#5A2E1B]">{value}</p>
   </div>
 );
-
-const BookingCard = ({
-  event,
-  client,
-  date,
-  location,
-}: {
-  event: string;
-  client: string;
-  date: string;
-  location: string;
-}) => (
-  <div className="flex justify-between items-center border rounded-xl p-4">
-    <div>
-      <p className="font-semibold text-[#5A2E1B]">{event}</p>
-      <p className="text-sm text-gray-600">Client: {client}</p>
-      <p className="text-sm text-gray-600">Date: {date}</p>
-      <p className="text-sm text-gray-600">Location: {location}</p>
-    </div>
-
-    <div className="flex gap-3">
-      <button className="px-4 py-1 rounded-full bg-green-600 text-white text-sm">
-        Accept
-      </button>
-      <button className="px-4 py-1 rounded-full bg-red-500 text-white text-sm">
-        Reject
-      </button>
-    </div>
-  </div>
-);
-
-const ReviewCard = ({
-  name,
-  rating,
-  review,
-}: {
-  name: string;
-  rating: string;
-  review: string;
-}) => (
-  <div className="border rounded-xl p-4">
-    <p className="font-medium">{name}</p>
-    <p className="text-sm text-gray-500">⭐ {rating}</p>
-    <p className="text-gray-700 mt-1">{review}</p>
-  </div>
-);
-
-const BookingRow = ({
-  event,
-  client,
-  date,
-  location,
-}: {
-  event: string;
-  client: string;
-  date: string;
-  location: string;
-}) => (
-  <div className="flex justify-between items-center p-4 hover:bg-orange-50 transition">
-    <div>
-      <p className="font-semibold text-[#5A2E1B]">{event}</p>
-      <p className="text-sm text-gray-600">Client: {client}</p>
-      <p className="text-sm text-gray-600">Date: {date}</p>
-      <p className="text-sm text-gray-600">Location: {location}</p>
-    </div>
-
-    <div className="flex gap-3">
-      <button className="px-4 py-1 rounded-full bg-green-600 text-white text-sm hover:bg-green-700">
-        Accept
-      </button>
-      <button className="px-4 py-1 rounded-full bg-red-500 text-white text-sm hover:bg-red-600">
-        Reject
-      </button>
-    </div>
-  </div>
-);
-
 
 export default FolkDashboard;
