@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FolkLayout from "../components/layout/FolkLayout";
 import { supabase } from "../supabase";
 
 interface ArtistData {
-  name: string;
+  Name: string;
   skill: string;
   location: string;
 }
 
 const FolkDashboard: React.FC = () => {
+  const navigate = useNavigate();
+
   const [artist, setArtist] = useState<ArtistData | null>(null);
 
   useEffect(() => {
@@ -21,13 +24,16 @@ const FolkDashboard: React.FC = () => {
 
       const { data, error } = await supabase
         .from("users")
-        .select("name, skill, location")
+        .select("Name, skill, location")
         .eq("id", session.user.id)
         .single();
 
-      if (!error && data) {
-        setArtist(data);
+      if (error) {
+        console.error(error);
+        return;
       }
+
+      setArtist(data);
     };
 
     loadArtist();
@@ -36,6 +42,8 @@ const FolkDashboard: React.FC = () => {
   return (
     <FolkLayout>
       <div className="space-y-8">
+
+        {/* HEADER */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-[#5A2E1B]">
             Artist Dashboard
@@ -46,14 +54,16 @@ const FolkDashboard: React.FC = () => {
           </p>
         </section>
 
+        {/* PROFILE CARD */}
         <section className="bg-white rounded-2xl p-6 flex items-center gap-6 shadow-sm">
+
           <div className="w-20 h-20 rounded-full bg-orange-200 flex items-center justify-center text-3xl">
             🎨
           </div>
 
           <div>
             <h2 className="text-2xl font-semibold text-[#5A2E1B]">
-              {artist?.name || "Loading..."}
+              {artist?.Name || "Loading..."}
             </h2>
 
             <p className="text-[#8B5E3C]">
@@ -65,17 +75,40 @@ const FolkDashboard: React.FC = () => {
             </p>
           </div>
 
-          <button className="ml-auto px-5 py-2 rounded-full bg-[#C04A1A] text-white text-sm">
+          <button
+            onClick={() => navigate("/edit-profile")}
+            className="ml-auto px-5 py-2 rounded-full bg-[#C04A1A] text-white text-sm hover:bg-[#a53d15]"
+          >
             Edit Profile
           </button>
+
         </section>
 
+        {/* STATS */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard title="Total Bookings" value="0" />
-          <StatCard title="Pending Requests" value="0" />
-          <StatCard title="Rating" value="0.0" />
-          <StatCard title="Profile Views" value="0" />
+
+          <StatCard
+            title="Total Bookings"
+            value="0"
+          />
+
+          <StatCard
+            title="Pending Requests"
+            value="0"
+          />
+
+          <StatCard
+            title="Rating"
+            value="0.0"
+          />
+
+          <StatCard
+            title="Profile Views"
+            value="0"
+          />
+
         </section>
+
       </div>
     </FolkLayout>
   );
@@ -89,8 +122,13 @@ const StatCard = ({
   value: string;
 }) => (
   <div className="bg-white rounded-2xl p-5 shadow-sm">
-    <p className="text-sm text-gray-500">{title}</p>
-    <p className="text-2xl font-semibold text-[#5A2E1B]">{value}</p>
+    <p className="text-sm text-gray-500">
+      {title}
+    </p>
+
+    <p className="text-2xl font-semibold text-[#5A2E1B]">
+      {value}
+    </p>
   </div>
 );
 

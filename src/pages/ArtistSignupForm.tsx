@@ -48,7 +48,7 @@ const ArtistSignupForm = () => {
         .insert([
           {
             id: data.user.id,
-            Name: name,
+            name: name,
             email: email,
             role: "artist",
             skill: skill,

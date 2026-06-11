@@ -1,262 +1,129 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
-
-const statusStyles: any = {
-  pending: "bg-yellow-100 text-yellow-700",
-  accepted: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
-};
+import FolkLayout from "../components/layout/FolkLayout";
 
 const ArtistBookings = () => {
   const [bookings, setBookings] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
-
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [sort, setSort] = useState("latest");
-
-  const [stats, setStats] = useState({
-    total: 0,
-    pending: 0,
-    accepted: 0,
-    cancelled: 0,
-  });
 
   useEffect(() => {
-    fetchBookings();
+    loadBookings();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [search, filter, sort, bookings]);
+  const loadBookings = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  const fetchBookings = async () => {
-    const { data } = await supabase.from("bookings").select("*");
+    if (!session) return;
 
-    if (!data) return;
+    const { data } = await supabase
+      .from("bookings")
+      .select("*")
+      .eq("artist_id", session.user.id)
+      .order("created_at", { ascending: false });
 
-    const enriched = await Promise.all(
-      data.map(async (booking) => {
-        const { data: artist } = await supabase
-          .from("users")
-          .select("name, skill")
-          .eq("id", booking.artist_id)
-          .single();
-
-        return {
-          ...booking,
-          artistName: artist?.name || "Unknown",
-          artistSkill: artist?.skill || "Performer",
-        };
-      })
-    );
-
-    setBookings(enriched);
-
-    setStats({
-      total: enriched.length,
-      pending: enriched.filter(b => b.status === "pending").length,
-      accepted: enriched.filter(b => b.status === "accepted").length,
-      cancelled: enriched.filter(b => b.status === "cancelled").length,
-    });
+    if (data) {
+      setBookings(data);
+    }
   };
 
-  const applyFilters = () => {
-    let data = [...bookings];
+  const updateBooking = async (
+    bookingId: string,
+    status: string
+  ) => {
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status })
+      .eq("id", bookingId);
 
-    // 🔍 SEARCH
-    if (search) {
-      data = data.filter(b =>
-        b.artistName.toLowerCase().includes(search.toLowerCase())
+    if (!error) {
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === bookingId
+            ? { ...b, status }
+            : b
+        )
       );
     }
-
-    // 🎯 FILTER
-    if (filter !== "all") {
-      data = data.filter(b => b.status === filter);
-    }
-
-    // ⬇️ SORT
-    data.sort((a, b) => {
-      if (sort === "latest") {
-        return new Date(b.event_date).getTime() - new Date(a.event_date).getTime();
-      } else {
-        return new Date(a.event_date).getTime() - new Date(b.event_date).getTime();
-      }
-    });
-
-    setFiltered(data);
   };
 
-  const handleAccept = async (booking: any) => {
-  await supabase
-    .from("bookings")
-    .update({ status: "accepted" })
-    .eq("id", booking.id);
-
-  // 🔔 ADD NOTIFICATION
-  await supabase.from("notifications").insert([
-    {
-      user_id: booking.user_id,
-      message: "Your booking has been accepted 🎉",
-      type: "accepted",
-    },
-  ]);
-
-  fetchBookings();
-};
-
-  const handleReject = async (booking: any) => {
-  await supabase
-    .from("bookings")
-    .update({ status: "cancelled" })
-    .eq("id", booking.id);
-
-  // 🔔 NOTIFICATION
-  await supabase.from("notifications").insert([
-    {
-      user_id: booking.user_id,
-      message: "Your booking was rejected ❌",
-      type: "cancelled",
-    },
-  ]);
-
-  fetchBookings();
-};
-
   return (
-    <div className="p-6 space-y-6">
+    <FolkLayout>
+      <div className="space-y-6">
 
-      {/* HEADER */}
-      <div>
-        <h1 className="text-3xl font-bold">Booking Requests</h1>
-        <p className="text-gray-500">Manage all artist bookings</p>
-      </div>
+        <div>
+          <h1 className="text-2xl font-bold">
+            Booking Requests
+          </h1>
 
-      {/* STATS */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl shadow">
-          <p className="text-sm text-gray-500">Total</p>
-          <h2 className="text-xl font-bold">{stats.total}</h2>
+          <p className="text-gray-500">
+            Accept or reject requests
+          </p>
         </div>
 
-        <div className="bg-yellow-50 p-4 rounded-xl shadow">
-          <p className="text-sm text-yellow-600">Pending</p>
-          <h2 className="text-xl font-bold">{stats.pending}</h2>
-        </div>
+        {bookings.length === 0 ? (
+          <div className="bg-white p-8 rounded-xl shadow text-center">
+            No booking requests yet
+          </div>
+        ) : (
+          bookings.map((booking) => (
+            <div
+              key={booking.id}
+              className="bg-white p-5 rounded-xl shadow"
+            >
+              <div className="space-y-2">
 
-        <div className="bg-green-50 p-4 rounded-xl shadow">
-          <p className="text-sm text-green-600">Accepted</p>
-          <h2 className="text-xl font-bold">{stats.accepted}</h2>
-        </div>
-
-        <div className="bg-red-50 p-4 rounded-xl shadow">
-          <p className="text-sm text-red-600">Cancelled</p>
-          <h2 className="text-xl font-bold">{stats.cancelled}</h2>
-        </div>
-      </div>
-
-      {/* 🔥 CONTROLS */}
-      <div className="flex flex-wrap gap-4 items-center">
-
-        {/* SEARCH */}
-        <input
-          type="text"
-          placeholder="Search artist..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border px-3 py-2 rounded-lg w-60"
-        />
-
-        {/* FILTER */}
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="border px-3 py-2 rounded-lg"
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="accepted">Accepted</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-
-        {/* SORT */}
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="border px-3 py-2 rounded-lg"
-        >
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-        </select>
-
-      </div>
-
-      {/* BOOKINGS */}
-      <div className="space-y-4">
-        {filtered.map((booking) => (
-          <div
-            key={booking.id}
-            className="flex items-center justify-between bg-white border rounded-xl p-4 shadow hover:shadow-md transition"
-          >
-            {/* LEFT */}
-            <div className="flex items-center gap-4">
-
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-200 to-orange-400 flex items-center justify-center text-white font-bold">
-                {booking.artistName?.[0]}
-              </div>
-
-              <div>
-                <h2 className="font-semibold text-lg">
-                  {booking.artistName}
-                </h2>
-
-                <p className="text-sm text-gray-500">
-                  {booking.artistSkill}
+                <p>
+                  <strong>Event:</strong>{" "}
+                  {booking.event_type}
                 </p>
 
-                <div className="text-sm mt-1 text-gray-600">
-                  {booking.event_type} •{" "}
-                  {new Date(booking.event_date).toDateString()}
-                </div>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {booking.event_date}
+                </p>
+
+                <p>
+                  <strong>Status:</strong>{" "}
+                  {booking.status}
+                </p>
+
               </div>
-            </div>
 
-            {/* RIGHT */}
-            <div className="flex items-center gap-4">
+              {booking.status === "requested" && (
+                <div className="flex gap-3 mt-4">
 
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  statusStyles[booking.status]
-                }`}
-              >
-                {booking.status}
-              </span>
-
-              {booking.status === "pending" && (
-                <div className="flex gap-2">
                   <button
-                    onClick={() => handleAccept(booking)}
-                    className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm"
+                    onClick={() =>
+                      updateBooking(
+                        booking.id,
+                        "accepted"
+                      )
+                    }
+                    className="bg-green-600 text-white px-4 py-2 rounded"
                   >
                     Accept
                   </button>
 
                   <button
-                    onClick={() => handleReject(booking)}
-                    className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
+                    onClick={() =>
+                      updateBooking(
+                        booking.id,
+                        "rejected"
+                      )
+                    }
+                    className="bg-red-600 text-white px-4 py-2 rounded"
                   >
                     Reject
                   </button>
+
                 </div>
               )}
-
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
-
-    </div>
+    </FolkLayout>
   );
 };
 
