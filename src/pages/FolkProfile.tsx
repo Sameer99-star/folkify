@@ -4,7 +4,7 @@ import FolkLayout from "../components/layout/FolkLayout";
 import { supabase } from "../supabase";
 
 interface ArtistProfileData {
-  Name: string;
+  name: string;
   skill: string;
   location: string;
   experience: string;
@@ -29,13 +29,13 @@ const FolkProfile = () => {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "Name, skill, location, experience, bio, phone_number, email"
+          "name, skill, location, experience, bio, phone_number, email"
         )
         .eq("id", session.user.id)
         .single();
 
       if (error) {
-        console.error(error);
+        console.error("Profile Error:", error);
         return;
       }
 
@@ -49,7 +49,6 @@ const FolkProfile = () => {
     <FolkLayout>
       <div className="space-y-8">
 
-        {/* PAGE HEADER */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
           <h2 className="text-2xl font-semibold text-[#5A2E1B]">
             Artist Profile
@@ -60,16 +59,14 @@ const FolkProfile = () => {
           </p>
         </section>
 
-        {/* PROFILE CARD */}
         <section className="bg-white rounded-2xl p-6 shadow-sm flex items-center gap-6">
-
           <div className="w-24 h-24 rounded-full bg-orange-200 flex items-center justify-center text-4xl">
             🎨
           </div>
 
           <div>
             <h3 className="text-xl font-semibold text-[#5A2E1B]">
-              {artist?.Name || "Loading..."}
+              {artist?.name || "Artist Name"}
             </h3>
 
             <p className="text-gray-600">
@@ -87,12 +84,9 @@ const FolkProfile = () => {
           >
             Edit Profile
           </button>
-
         </section>
 
-        {/* DETAILS */}
         <section className="bg-white rounded-2xl p-6 shadow-sm">
-
           <h3 className="text-lg font-semibold text-[#5A2E1B] mb-4">
             Personal Details
           </h3>
@@ -101,7 +95,7 @@ const FolkProfile = () => {
 
             <Detail
               label="Artist Name"
-              value={artist?.Name || ""}
+              value={artist?.name || ""}
             />
 
             <Detail
@@ -131,8 +125,6 @@ const FolkProfile = () => {
 
           </div>
 
-          {/* BIO */}
-
           <div className="mt-6">
             <h4 className="font-semibold text-[#5A2E1B] mb-2">
               About Artist
@@ -142,7 +134,6 @@ const FolkProfile = () => {
               {artist?.bio || "No bio added yet"}
             </p>
           </div>
-
         </section>
 
       </div>
