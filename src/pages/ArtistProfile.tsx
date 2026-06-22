@@ -60,9 +60,9 @@ if (loading) {
       </AppLayout>
     );
   }
-
-  const handleBookNow = async () => {
-  const { data: sessionData } = await supabase.auth.getSession();
+const handleConfirmBooking = async () => {
+  const { data: sessionData } =
+    await supabase.auth.getSession();
 
   if (!sessionData.session) {
     alert("Please login first");
@@ -71,33 +71,35 @@ if (loading) {
 
   const userId = sessionData.session.user.id;
 
-  const { error } = await supabase.from("bookings").insert([
-    {
-      user_id: userId,
-      artist_id: artist.id,
-      event_type: "General",
-      event_date: new Date().toISOString(),
-    },
-  ]);
+  const { error } = await supabase
+    .from("bookings")
+    .insert([
+      {
+        user_id: userId,
+        artist_id: artist.id,
+        event_type: selectedEventType || "Performance",
+        event_date:
+          selectedDate || new Date().toISOString(),
+        status: "requested",
+      },
+    ]);
 
   if (error) {
-    alert("Booking failed ❌");
     console.log(error);
-  } else {
-    alert("Booking successful ✅");
+    alert("Booking failed");
+    return;
   }
-};
 
-  const handleConfirmBooking = () => {
-    setBookingConfirmed(true);
-    setTimeout(() => {
-      setShowBooking(false);
-      setBookingConfirmed(false);
-      setBookingStep(1);
-      setSelectedEventType(null);
-      setSelectedDate(null);
-    }, 3000);
-  };
+  setBookingConfirmed(true);
+
+  setTimeout(() => {
+    setShowBooking(false);
+    setBookingConfirmed(false);
+    setBookingStep(1);
+    setSelectedEventType(null);
+    setSelectedDate(null);
+  }, 3000);
+};
 
   return (
     <AppLayout hideNav>
@@ -251,13 +253,13 @@ if (loading) {
 
         {/* Fixed Bottom CTA */}
         <div className="fixed bottom-0 inset-x-0 p-4 bg-background/95 backdrop-blur-sm border-t border-border safe-bottom">
-          <Button
-            size="lg"
-            className="w-full bg-gradient-terracotta hover:opacity-90"
-            onClick={handleBookNow}
-          >
-            Book This Artist
-          </Button>
+<Button
+  size="lg"
+  className="w-full bg-gradient-terracotta hover:opacity-90"
+  onClick={() => setShowBooking(true)}
+>
+  Book This Artist
+</Button>
         </div>
       </div>
 

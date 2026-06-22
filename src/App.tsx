@@ -33,6 +33,7 @@ import ArtistSignupForm from "./pages/ArtistSignupForm";
 import ProfileEdit from "./pages/ProfileEdit";
 import Language from "./pages/Language";
 import Settings from "./pages/Settings";
+import EditProfile from "./pages/EditProfile";
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,7 @@ const App = () => {
             <Route path="/folk-dashboard" element={<FolkDashboard />} />
             <Route path="/folk/bookings" element={<FolkBookings />} />
             <Route path="/folk/profile" element={<FolkProfile />} />
+            <Route path="/edit-profile" element={<EditProfile />} />
 
             {/* ✅ ARTIST HANDLES BOOKINGS */}
             <Route path="/artist-bookings" element={<ArtistBookings />} />
